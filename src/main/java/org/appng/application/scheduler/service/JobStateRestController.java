@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -121,7 +121,7 @@ public class JobStateRestController implements JobStateApi {
 			@RequestParam(value = "all", required = false, defaultValue = "false") Boolean addAll,
 			@RequestParam(value = "thresholds", required = false) Boolean thresholds) {
 		if (!isAuthorized()) {
-			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 		List<Job> jobList = Lists.newArrayList();
 		if (addAll) {
@@ -135,7 +135,7 @@ public class JobStateRestController implements JobStateApi {
 							addJobs(addJobdata, thresholds, jobList, site, schedulerApp);
 						}
 					} catch (SchedulerException e) {
-						log.error("error while retrieving jobs for site " + site.getName(), e);
+						LOGGER.error("error while retrieving jobs for site " + site.getName(), e);
 					}
 				}
 			}
@@ -143,7 +143,7 @@ public class JobStateRestController implements JobStateApi {
 			try {
 				addJobs(addJobdata, thresholds, jobList, site, app);
 			} catch (SchedulerException e) {
-				log.error("error while retrieving jobs for site " + site.getName(), e);
+				LOGGER.error("error while retrieving jobs for site " + site.getName(), e);
 			}
 		}
 
@@ -193,7 +193,7 @@ public class JobStateRestController implements JobStateApi {
 	// @formatter:on
 	) {
 		if (!isAuthorized()) {
-			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 
 		JobState jobState = getState(application, job, pageSize, records);
@@ -239,10 +239,10 @@ public class JobStateRestController implements JobStateApi {
 
 				Page<org.appng.core.domain.JobRecord> okRecords = jobRecordService.getJobRecords(site.getName(), application,
 						jobKey.getName(), startedAfter, now, ExecutionResult.SUCCESS.name(), null,
-						new PageRequest(0, 1));
+						PageRequest.of(0, 1));
 
 				Page<org.appng.core.domain.JobRecord> failedRecords = jobRecordService.getJobRecords(site.getName(), application,
-						jobKey.getName(), startedAfter, now, ExecutionResult.FAIL.name(), null, new PageRequest(0, 1));
+						jobKey.getName(), startedAfter, now, ExecutionResult.FAIL.name(), null, PageRequest.of(0, 1));
 
 				if (hasTimeUnit) {
 					jobState.setStartedAfter(toOffsetDateTime(startedAfter));
@@ -257,7 +257,7 @@ public class JobStateRestController implements JobStateApi {
 
 				if (withRecords) {
 					Page<org.appng.core.domain.JobRecord> allRecords = jobRecordService.getJobRecords(site.getName(), application,
-							jobKey.getName(), startedAfter, now, null, null, new PageRequest(0, pageSize));
+							jobKey.getName(), startedAfter, now, null, null, PageRequest.of(0, pageSize));
 					jobState.setRecords(allRecords.map(r -> toRecord(r)).getContent());
 				}
 
@@ -301,7 +301,7 @@ public class JobStateRestController implements JobStateApi {
 				jobState.setMessage(message);
 			}
 		} catch (SchedulerException e) {
-			log.error("error while retrieving job", e);
+			LOGGER.error("error while retrieving job", e);
 		}
 		return jobState;
 	}

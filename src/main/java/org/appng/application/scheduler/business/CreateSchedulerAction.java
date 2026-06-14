@@ -85,7 +85,7 @@ public class CreateSchedulerAction extends SchedulerAware implements ActionProvi
 					jobKey.getGroup());
 			message = request.getMessage(MessageConstants.JOB_CREATED, jobKey.getName());
 		} catch (Exception e) {
-			log.error("SchedulerException while creating scheduler", e);
+			LOGGER.error("SchedulerException while creating scheduler", e);
 		}
 		if (!fp.hasErrors()) {
 			fp.addOkMessage(message);

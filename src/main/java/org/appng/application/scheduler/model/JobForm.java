@@ -17,6 +17,7 @@ package org.appng.application.scheduler.model;
 
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.appng.api.Environment;
 import org.appng.api.FieldProcessor;
@@ -34,9 +35,9 @@ import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class JobForm implements FormValidator {
 
-	private static Logger log = LoggerFactory.getLogger(JobForm.class);
 	private static String JOB_NAME = "jobModel.name";
 
 	private JobModel jobModel;
@@ -69,7 +70,7 @@ public class JobForm implements FormValidator {
 			}
 
 		} catch (SchedulerException e) {
-			log.error("Error while validating name " + getJobModel().getName(), e);
+			LOGGER.error("Error while validating name " + getJobModel().getName(), e);
 		}
 	}
 

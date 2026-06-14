@@ -49,7 +49,7 @@ public class RecordsRestController {
 	private final JobRecordService jobRecordService;
 	private @Value("${" + PropertyConstants.BEARER_TOKEN + "}") String bearerToken;
 
-	@RequestMapping(value = "/jobRecords", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "/jobRecords", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<JobRecord>> getJobRecords(
 			@RequestParam(required = false, name = "application") String applicationName,
 			@RequestParam(required = false, name = "job") String jobName,
@@ -60,7 +60,7 @@ public class RecordsRestController {
 			@RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) List<String> auths,
 			Application application, Site site) {
 		if (!verifyToken(auths)) {
-			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 
 		Page<JobRecord> records = jobRecordService.getRecords(site.getName(), applicationName, jobName,

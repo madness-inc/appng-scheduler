@@ -69,7 +69,7 @@ public class SchedulerUtils {
 					.withIdentity(new TriggerKey(id + "-simpletrigger-" + hashCode(), jobDetail.getKey().getGroup()))
 					.startNow().forJob(key).build();
 			scheduler.scheduleJob(trigger);
-			log.info("Created trigger '{}' for job '{}' with start time '{}'", trigger.getKey(),
+			LOGGER.info("Created trigger '{}' for job '{}' with start time '{}'", trigger.getKey(),
 					jobDetail.getJobDataMap().getString(Constants.JOB_SCHEDULED_JOB), trigger.getStartTime());
 			addMessage(request, fp, MessageConstants.JOB_RUNNING, false, false, null, id);
 		}
@@ -130,12 +130,12 @@ public class SchedulerUtils {
 			jobDetail.getJobDataMap().put(Constants.JOB_ENABLED, false);
 			if (forcefullyDisabled) {
 				jobDetail.getJobDataMap().put(Constants.JOB_FORCEFULLY_DISABLED, forcefullyDisabled);
-				log.info("Job {} was disabled forcefully.", jobDetail.getKey());
+				LOGGER.info("Job {} was disabled forcefully.", jobDetail.getKey());
 			}
 			saveJob(jobDetail);
 			boolean unscheduled = scheduler.unscheduleJob(cronTrigger.getKey());
 			if (unscheduled) {
-				log.info("Deleted trigger '{}' for job '{}' with expression '{}'", cronTrigger.getKey(),
+				LOGGER.info("Deleted trigger '{}' for job '{}' with expression '{}'", cronTrigger.getKey(),
 						jobDetail.getKey(), cronExpression);
 				addMessage(request, fp, MessageConstants.JOB_UNSCHEDULED, false, false, null, id);
 			}
@@ -150,7 +150,7 @@ public class SchedulerUtils {
 		CronTrigger cronTrigger = createCronTrigger(jobDetail, cronExpression, id, jobDesc, triggerGroup);
 		if (cronTrigger != null) {
 			scheduler.scheduleJob(cronTrigger);
-			log.info("Created trigger '{}' for job '{}' with expression '{}'", cronTrigger.getKey(), jobDetail.getKey(),
+			LOGGER.info("Created trigger '{}' for job '{}' with expression '{}'", cronTrigger.getKey(), jobDetail.getKey(),
 					cronExpression);
 			addMessage(request, fp, MessageConstants.JOB_SCHEDULED_EXPR, false, false, null, id, cronExpression);
 		}
@@ -182,7 +182,7 @@ public class SchedulerUtils {
 		JobKey key = jobDetail.getKey();
 		if (!isRunning(jobDetail)) {
 			scheduler.deleteJob(key);
-			log.info("Deleted job: {}", jobDetail.getKey());
+			LOGGER.info("Deleted job: {}", jobDetail.getKey());
 			addMessage(request, fp, MessageConstants.JOB_DELETED, false, false, null, id);
 		} else {
 			addMessage(request, fp, MessageConstants.JOB_DELETE_ERROR, true, false, null, id);
@@ -242,7 +242,7 @@ public class SchedulerUtils {
 		if (persistentJobData.getBoolean(Constants.JOB_FORCEFULLY_DISABLED)) {
 			enabled = true;
 			persistentJobData.remove(Constants.JOB_FORCEFULLY_DISABLED);
-			log.info("Job '{}' was disabled forcefully and is being reenabled.", jobDetail.getKey());
+			LOGGER.info("Job '{}' was disabled forcefully and is being reenabled.", jobDetail.getKey());
 		}
 
 		boolean forceState = persistentJobData.getBoolean(Constants.JOB_FORCE_STATE);
@@ -264,9 +264,9 @@ public class SchedulerUtils {
 		boolean isExisting = scheduler.checkExists(jobDetail.getKey());
 		scheduler.addJob(jobDetail, true);
 		if (!isExisting) {
-			log.info("Created job: {}", jobDetail.getKey());
+			LOGGER.info("Created job: {}", jobDetail.getKey());
 		} else {
-			log.debug("Updated job: {}", jobDetail.getKey());
+			LOGGER.debug("Updated job: {}", jobDetail.getKey());
 		}
 	}
 

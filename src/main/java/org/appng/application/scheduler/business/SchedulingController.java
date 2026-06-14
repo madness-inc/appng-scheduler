@@ -65,7 +65,7 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 				for (String jobBeanName : jobBeanNames) {
 					ScheduledJob scheduledJob = (ScheduledJob) a.getBean(jobBeanName);
 					if (null == scheduledJob) {
-						log.warn("error retrieving {} from {}", jobBeanName, a.getName());
+						LOGGER.warn("error retrieving {} from {}", jobBeanName, a.getName());
 						continue;
 					}
 					try {
@@ -77,11 +77,11 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 							String description = scheduledJob.getDescription();
 							schedulerUtils.scheduleJob(jobDetail, jobKey.getName(), description, site.getName());
 						} else {
-							log.info("Job '{}' is disabled (site: {}, application: {})", jobBeanName, site.getName(),
+							LOGGER.info("Job '{}' is disabled (site: {}, application: {})", jobBeanName, site.getName(),
 									a.getName());
 						}
 					} catch (Exception e) {
-						log.error(String.format("error starting job '%s' of application %s (type is %s)", jobBeanName,
+						LOGGER.error(String.format("error starting job '%s' of application %s (type is %s)", jobBeanName,
 								a.getName(), scheduledJob.getClass().getName()), e);
 					}
 				}
@@ -89,7 +89,7 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 			scheduler.getListenerManager().addJobListener(recordingJobListener);
 			scheduler.start();
 		} catch (SchedulerException e) {
-			log.error("error while starting scheduler", e);
+			LOGGER.error("error while starting scheduler", e);
 			return false;
 		}
 		return true;
@@ -110,10 +110,10 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 				}
 				Application app = site.getApplication(appName);
 				if (null == app) {
-					log.warn("application '{}' of site '{}' not found for job '{}'", appName, site.getName(),
+					LOGGER.warn("application '{}' of site '{}' not found for job '{}'", appName, site.getName(),
 							jobKey.getName());
 				} else if (null == app.getBean(beanName, ScheduledJob.class)) {
-					log.error("bean named '{}' not found in application '{}' of site '{}' for job '{}'", beanName,
+					LOGGER.error("bean named '{}' not found in application '{}' of site '{}' for job '{}'", beanName,
 							appName, site.getName(), jobKey.getName());
 				} else {
 					jobOK = true;
@@ -123,7 +123,7 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 				}
 			}
 		} catch (SchedulerException e) {
-			log.error("error while retrieving jobs for site " + site.getName(), e);
+			LOGGER.error("error while retrieving jobs for site " + site.getName(), e);
 		}
 	}
 
@@ -134,7 +134,7 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 			scheduler.getContext().clear();
 			return true;
 		} catch (SchedulerException e) {
-			log.error("error while removing scheduler from site " + site.getName(), e);
+			LOGGER.error("error while removing scheduler from site " + site.getName(), e);
 		} finally {
 			scheduler = null;
 		}
@@ -157,7 +157,7 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 			}
 
 			public void addOkMessage(String message) {
-				log.info(message);
+				LOGGER.info(message);
 			}
 
 			public void addNoticeMessage(FieldDef field, String message) {
@@ -165,7 +165,7 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 			}
 
 			public void addNoticeMessage(String message) {
-				log.debug(message);
+				LOGGER.debug(message);
 			}
 
 			public void addInvalidMessage(FieldDef field, String message) {
@@ -173,7 +173,7 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 			}
 
 			public void addInvalidMessage(String message) {
-				log.warn(message);
+				LOGGER.warn(message);
 			}
 
 			public void addErrorMessage(FieldDef field, String message) {
@@ -181,7 +181,7 @@ public class SchedulingController extends SchedulerAware implements ApplicationC
 			}
 
 			public void addErrorMessage(String message) {
-				log.error(message);
+				LOGGER.error(message);
 			}
 
 			public List<FieldDef> getFields() {

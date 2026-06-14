@@ -17,7 +17,7 @@ package org.appng.application.scheduler.quartz;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.appng.api.Environment;
 import org.appng.api.Platform;

@@ -72,7 +72,7 @@ public class UpdateSchedulerAction extends SchedulerAware implements ActionProvi
 				fp.addErrorMessage(message);
 			}
 		} catch (SchedulerException e) {
-			log.error("SchedulerException while updating scheduler", e);
+			LOGGER.error("SchedulerException while updating scheduler", e);
 		}
 	}
 

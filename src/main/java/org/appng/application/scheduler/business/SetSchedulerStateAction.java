@@ -77,7 +77,7 @@ public class SetSchedulerStateAction extends SchedulerAware implements ActionPro
 				schedulerUtils.deleteJob(jobDetail, id);
 			}
 		} catch (SchedulerException e) {
-			log.error("Error while changing scheduler state", e);
+			LOGGER.error("Error while changing scheduler state", e);
 		}
 	}
 

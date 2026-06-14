@@ -60,7 +60,8 @@ public class SchedulerConfig {
 
 	@Bean
 	public SchedulerFactoryBean scheduler(JobFactory jobFactory, @Value("${site.name}") String siteName,
-			DataSourceTransactionManager quartzTransactionManager, Properties quartzProperties) throws SQLException {
+			DataSourceTransactionManager quartzTransactionManager,
+			@Qualifier("quartzProperties") Properties quartzProperties) throws SQLException {
 		DataSource dataSource = quartzTransactionManager.getDataSource();
 		SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
 
@@ -99,8 +100,8 @@ public class SchedulerConfig {
 		}
 		quartzProperties.put(DRIVER_DELEGATE_INIT_STRING, "delegate=" + driverDelegate);
 
-		if (log.isDebugEnabled()) {
-			log.debug("Quartz properties: {}", quartzProperties);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Quartz properties: {}", quartzProperties);
 		}
 
 		scheduler.setQuartzProperties(quartzProperties);

@@ -28,8 +28,5 @@
 		<jdbc:script location="${script:classpath:/org/quartz/impl/jdbcjobstore/tables_hsqldb.sql}" />
 	</jdbc:initialize-database>
 
-	<bean id="jobExecutionRecordRepository" class="org.mockito.Mockito" factory-method="mock">
-		<constructor-arg value="org.appng.core.repository.JobExecutionRecordRepository" />
-	</bean>
 
 </beans>

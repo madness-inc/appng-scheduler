@@ -57,7 +57,7 @@ public class DriverDelegateWrapper implements DriverDelegate {
 		String[] realDelegate = initString.split("\\|")[0].split("=");
 		String delegateClass = realDelegate[1];
 		try {
-			this.delegate = classLoadHelper.loadClass(delegateClass, DriverDelegate.class).newInstance();
+			this.delegate = classLoadHelper.loadClass(delegateClass, DriverDelegate.class).getDeclaredConstructor().newInstance();
 			this.delegate.initialize(logger, tablePrefix, schedName, instanceId, classLoadHelper, useProperties, null);
 		} catch (ReflectiveOperationException e) {
 			throw new NoSuchDelegateException(delegateClass, e);

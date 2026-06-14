@@ -95,7 +95,7 @@ public class IndexState extends SchedulerAware implements DataProvider {
 								siteName);
 					}
 				} catch (SchedulerException e) {
-					log.error("error reading index for site " + siteName, e);
+					LOGGER.error("error reading index for site " + siteName, e);
 				}
 
 				String siteRoot = theSite.getProperties().getString(SiteProperties.SITE_ROOT_DIR);
@@ -116,7 +116,7 @@ public class IndexState extends SchedulerAware implements DataProvider {
 						}
 						indexInfo.numDocs = reader.numDocs();
 					} catch (IOException e) {
-						log.error("error reading index for site " + siteName, e);
+						LOGGER.error("error reading index for site " + siteName, e);
 					}
 				}
 				indexInfo.size %= 1000; // size in KB

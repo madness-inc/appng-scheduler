@@ -151,7 +151,7 @@ public class JobModel implements Named<String>, Comparable<Named<String>> {
 				jobModel.setStateName(stateName);
 			}
 		} catch (SchedulerException | JsonProcessingException e) {
-			log.error("error creating model for " + jobKey, e);
+			LOGGER.error("error creating model for " + jobKey, e);
 		}
 		return jobModel;
 	}

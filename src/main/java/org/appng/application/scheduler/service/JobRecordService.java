@@ -121,7 +121,7 @@ public class JobRecordService {
 		SearchQuery<org.appng.core.domain.JobRecord> query = getRecordSearchQuery(siteName, applicationFilter, jobFilter, null, null,
 				null, null);
 		Page<org.appng.core.domain.JobRecord> oldestRun = recordRepository.search(query,
-				new PageRequest(0, 1, new Sort("startTime")));
+				PageRequest.of(0, 1, Sort.by("startTime")));
 		return oldestRun.hasContent() ? oldestRun.getContent().get(0) : null;
 	}
 
@@ -147,7 +147,7 @@ public class JobRecordService {
 			SearchQuery<org.appng.core.domain.JobRecord> query = recordRepository.createSearchQuery()
 					.equals(FIELD_SITE, site.getName()).lessEquals(FIELD_START, outdated);
 			Page<org.appng.core.domain.JobRecord> outdatedRecords = recordRepository.search(query, null);
-			recordRepository.delete(outdatedRecords);
+			recordRepository.deleteAll(outdatedRecords);
 
 			return (int) outdatedRecords.getTotalElements();
 		}
@@ -155,7 +155,7 @@ public class JobRecordService {
 	}
 
 	public JobRecord getRecord(Integer recordId) {
-		return JobRecord.fromDomain(recordRepositoryFull.findOne(recordId));
+		return JobRecord.fromDomain(recordRepositoryFull.findById(recordId).orElse(null));
 	}
 
 }
