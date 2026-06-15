@@ -337,6 +337,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.5.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.appng</groupId>
 			<artifactId>appng-core</artifactId>
 		</dependency>

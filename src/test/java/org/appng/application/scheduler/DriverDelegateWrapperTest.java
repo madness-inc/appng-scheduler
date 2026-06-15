@@ -56,28 +56,28 @@ public class DriverDelegateWrapperTest {
 	}
 
 	@Test
-	public void testConcurrentExectionDisallowed() throws Exception {
+	public void testConcurrentExecutionDisallowed() throws Exception {
 
 		JobStoreSupport jobStore = getJobStore();
 
 		JobDetail job1 = JobBuilder.newJob(Job.class).withIdentity(new JobKey("nonConcurrent", "group")).build();
 		SchedulerJobDetail nonConcurrentJob = new SchedulerJobDetail(job1);
-		Assert.assertTrue(nonConcurrentJob.isConcurrentExectionDisallowed());
+		Assert.assertTrue(nonConcurrentJob.isConcurrentExecutionDisallowed());
 		jobStore.storeJob(nonConcurrentJob, true);
 
 		JobDetail retrieveNonConcurrentJob = jobStore.retrieveJob(nonConcurrentJob.getKey());
-		Assert.assertEquals(nonConcurrentJob.isConcurrentExectionDisallowed(),
-				retrieveNonConcurrentJob.isConcurrentExectionDisallowed());
+		Assert.assertEquals(nonConcurrentJob.isConcurrentExecutionDisallowed(),
+				retrieveNonConcurrentJob.isConcurrentExecutionDisallowed());
 
 		JobDetail job2 = JobBuilder.newJob(Job.class).withIdentity(new JobKey("concurrentJob", "group")).build();
 		job2.getJobDataMap().put(Constants.JOB_ALLOW_CONCURRENT_EXECUTIONS, true);
 		SchedulerJobDetail concurrentJob = new SchedulerJobDetail(job2);
-		Assert.assertFalse(concurrentJob.isConcurrentExectionDisallowed());
+		Assert.assertFalse(concurrentJob.isConcurrentExecutionDisallowed());
 		jobStore.storeJob(concurrentJob, true);
 
 		JobDetail retrieveConcurrentJob = jobStore.retrieveJob(job2.getKey());
-		Assert.assertEquals(job2.isConcurrentExectionDisallowed(),
-				retrieveConcurrentJob.isConcurrentExectionDisallowed());
+		Assert.assertEquals(job2.isConcurrentExecutionDisallowed(),
+				retrieveConcurrentJob.isConcurrentExecutionDisallowed());
 
 	}
 

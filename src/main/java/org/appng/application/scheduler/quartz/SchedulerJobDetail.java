@@ -25,7 +25,7 @@ import org.quartz.JobKey;
 
 /**
  * A custom {@link JobDetail} implementation that does not rely on {@link DisallowConcurrentExecution} in
- * {@link #isConcurrentExectionDisallowed()}. Instead, the value of {@value Constants#JOB_ALLOW_CONCURRENT_EXECUTIONS}
+ * {@link #isConcurrentExecutionDisallowed()}. Instead, the value of {@value Constants#JOB_ALLOW_CONCURRENT_EXECUTIONS}
  * from the job's datamap is used. This is a workaround for
  * <a href="https://github.com/quartz-scheduler/quartz/issues/184">Quartz issue #184</a>.
  * 
@@ -45,7 +45,7 @@ public class SchedulerJobDetail implements JobDetail {
 		this.detail = detail;
 	}
 
-	public boolean isConcurrentExectionDisallowed() {
+	public boolean isConcurrentExecutionDisallowed() {
 		return !getJobDataMap().getBoolean(Constants.JOB_ALLOW_CONCURRENT_EXECUTIONS);
 	}
 
